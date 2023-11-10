@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GA_for_ANN.iml" filepath="$PROJECT_DIR$/.idea/GA_for_ANN.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../GA_for_ANN/.idea/GA_for_ANN.iml" filepath="$PROJECT_DIR$/../GA_for_ANN/.idea/GA_for_ANN.iml" />
     </modules>
   </component>
 </project>
