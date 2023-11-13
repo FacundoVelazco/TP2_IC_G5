@@ -27,7 +27,8 @@ ga_instance = pygad.GA(num_generations=3,
                        gene_type=int,
                        fitness_func=fitness_func,
                        mutation_type="random",
-                       mutation_probability=0.7)
+                       mutation_probability=0.7
+                       )
 
 ga_instance.run()
 

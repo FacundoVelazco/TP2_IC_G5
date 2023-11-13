@@ -2,42 +2,43 @@ import pygad
 import numpy as np
 import utils
 
-
-
 genes = 24
 
-initial_pop = [[1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0,1],
-               [1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,0]]
+def mutation_func(offspring, ga_instance):
+    mutation_indices = np.where(np.random.rand(offspring.shape[1]) < ga_instance.mutation_probability)[0]
+    offspring[:, mutation_indices] = 1 - offspring[:, mutation_indices]
+    return offspring
 
+initial_pop = [[1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1],
+               [1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0]]
 
 capas_ocultas = 3
+
 def fitness_func(pygadClass, solution, solution_idx):
-    # if np.all(solution > 0):
-        numerosEnCapas, funcionesEnCapas = utils.desnormalizar(solution)
-        print(numerosEnCapas,funcionesEnCapas)
-        output = utils.evaluateANN(capas_ocultas, numerosEnCapas, funcionesEnCapas)
-        fitness = (1 / output) * 10000
+    numerosEnCapas, funcionesEnCapas = utils.desnormalizar(solution)
+    print(numerosEnCapas, funcionesEnCapas)
+    output = utils.evaluateANN(capas_ocultas, numerosEnCapas, funcionesEnCapas)
+    fitness = (1 / output) * 10000
        
-        print('fitness: ' + str(fitness))
-        return fitness
-    # else:
-    #     return 0
+    print('fitness: ' + str(fitness))
+    return fitness
 
 
-ga_instance = pygad.GA(num_generations=5,
+ga_instance = pygad.GA(num_generations=20,
                        sol_per_pop=2,
                        initial_population=initial_pop,
                        num_genes=genes,
                        num_parents_mating=2,
                        gene_type=int,
                        fitness_func=fitness_func,
-                       mutation_type="random",
-                       mutation_probability=0.7
+                       mutation_type=mutation_func,
+                       mutation_probability=0.5
                        )
 
-ga_instance.run()
+print("------------POBLACION INICIAL-----------------")
+print(utils.desnormalizar(ga_instance.initial_population[0]), utils.desnormalizar(ga_instance.initial_population[1]))
 
-print(utils.desnormalizar(ga_instance.initial_population[0]) , utils.desnormalizar(ga_instance.initial_population[1]))
-print("-----------------------------")
-print(utils.desnormalizar(ga_instance.population[0]),utils.desnormalizar(ga_instance.population[1]))
+ga_instance.run()
+print("---------------FINAL--------------")
+print(utils.desnormalizar(ga_instance.population[0]), utils.desnormalizar(ga_instance.population[1]))
 ga_instance.plot_fitness()
