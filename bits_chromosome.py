@@ -9,15 +9,17 @@ def mutation_func(offspring, ga_instance):
     offspring[:, mutation_indices] = 1 - offspring[:, mutation_indices]
     return offspring
 
-initial_pop = [[1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1],
-               [1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0]]
 
-capas_ocultas = 3
+number_bits = 6
+hidden_layers = 5
+activation_functions = ['sigmoid','relu','tanh','softmax']
+genes = hidden_layers * number_bits + 2 * hidden_layers
+
 
 def fitness_func(pygadClass, solution, solution_idx):
-    numerosEnCapas, funcionesEnCapas = utils.desnormalizar(solution)
-    print(numerosEnCapas, funcionesEnCapas)
-    output = utils.evaluateANN(capas_ocultas, numerosEnCapas, funcionesEnCapas)
+    neuronas, funciones = utils.desnormalizar(solution)
+    print(neuronas, funciones)
+    output = utils.evaluateANN(len(neuronas), neuronas, funciones)
     fitness = (1 / output) * 10000
        
     print('fitness: ' + str(fitness))
@@ -26,13 +28,15 @@ def fitness_func(pygadClass, solution, solution_idx):
 
 ga_instance = pygad.GA(num_generations=20,
                        sol_per_pop=2,
-                       initial_population=initial_pop,
+                    #    initial_population=initial_pop,
                        num_genes=genes,
                        num_parents_mating=2,
                        gene_type=int,
                        fitness_func=fitness_func,
                        mutation_type=mutation_func,
-                       mutation_probability=0.5
+                       mutation_probability=0.6,
+                        init_range_low=0,
+                       init_range_high=2,
                        )
 
 print("------------POBLACION INICIAL-----------------")
